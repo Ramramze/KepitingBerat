@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Crab - Realtime</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        dark: '#0f172a',
+                        card: '#1e293b',
+                        accent: '#38bdf8',
+                        danger: '#ef4444',
+                        safe: '#10b981',
+                        warning: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .pulse-danger {
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .value-transition { transition: color 0.3s ease; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 font-sans">
+
+    <header class="flex flex-col md:flex-row justify-between items-center mb-8 pb-6 border-b border-slate-700">
+        <div>
+            <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white mb-2 uppercase">
+                <i class="fa-solid fa-crab text-accent mr-3"></i>Smart Crab House Dashboard
+            </h1>
+            <p class="text-slate-400 text-lg">Real-time Monitoring & Biomass Estimation</p>
+        </div>
+        <div class="mt-4 md:mt-0 flex items-center space-x-4">
+            <div id="connection-status" class="flex items-center px-6 py-3 bg-slate-800 rounded-full border border-slate-600 shadow-lg transition-colors">
+                <div id="connection-dot" class="w-3 h-3 rounded-full bg-warning mr-3 animate-pulse"></div>
+                <span id="connection-text" class="text-sm font-bold text-slate-300">Menghubungkan ke Firebase...</span>
+            </div>
+        </div>
+    </header>
+
+    <nav class="flex flex-wrap gap-2 md:gap-4 mb-8 border-b border-slate-700/50 pb-4">
+        <a href="realtime.html" class="px-5 py-2.5 rounded-xl bg-accent text-dark font-bold shadow-lg shadow-accent/20 transition-all flex items-center">
+            <i class="fa-solid fa-tower-broadcast mr-2"></i> Real-time Monitoring
+        </a>
+        <a href="weight-log.html" class="px-5 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-semibold hover:bg-slate-700 transition-all flex items-center">
+            <i class="fa-solid fa-scale-balanced mr-2"></i> Log Berat
+        </a>
+        <a href="water-log.html" class="px-5 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-semibold hover:bg-slate-700 transition-all flex items-center">
+            <i class="fa-solid fa-water mr-2"></i> Log Air
+        </a>
+        <a href="prediction.html" class="px-5 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-semibold hover:bg-slate-700 transition-all flex items-center">
+            <i class="fa-solid fa-brain mr-2"></i> Prediksi ML
+        </a>
+    </nav>
+
+    <div class="mb-4">
+        <h2 class="text-xl font-semibold text-slate-300 mb-4"><i class="fa-solid fa-droplet text-blue-400 mr-2"></i>Parameter Kualitas Air</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <!-- Suhu -->
+        <div class="glass-panel rounded-2xl p-6 flex flex-col items-center relative overflow-hidden group">
+            <div class="absolute top-0 left-0 w-full h-1 bg-safe" id="border-suhu"></div>
+            <div class="w-full flex justify-between items-start mb-2">
+                <span class="text-slate-400 font-medium">Suhu</span>
+                <i class="fa-solid fa-temperature-half text-slate-500 group-hover:text-safe transition-colors text-xl"></i>
+            </div>
+            <div class="my-4 text-center">
+                <span id="val-suhu" class="text-5xl font-bold text-white value-transition">--</span>
+                <span class="text-2xl text-slate-400 ml-1">°C</span>
+            </div>
+            <div id="status-suhu" class="mt-auto px-4 py-1 rounded-full bg-slate-700 text-slate-300 text-sm font-semibold border border-slate-600">Menunggu Data</div>
+        </div>
+
+        <!-- pH -->
+        <div class="glass-panel rounded-2xl p-6 flex flex-col items-center relative overflow-hidden group">
+            <div class="absolute top-0 left-0 w-full h-1 bg-safe" id="border-ph"></div>
+            <div class="w-full flex justify-between items-start mb-2">
+                <span class="text-slate-400 font-medium">pH</span>
+                <i class="fa-solid fa-vial text-slate-500 group-hover:text-safe transition-colors text-xl"></i>
+            </div>
+            <div class="my-4 text-center">
+                <span id="val-ph" class="text-5xl font-bold text-white value-transition">--</span>
+            </div>
+            <div id="status-ph" class="mt-auto px-4 py-1 rounded-full bg-slate-700 text-slate-300 text-sm font-semibold border border-slate-600">Menunggu Data</div>
+        </div>
+
+        <!-- Salinitas -->
+        <div class="glass-panel rounded-2xl p-6 flex flex-col items-center relative overflow-hidden group" id="card-salinitas">
+            <div class="absolute top-0 left-0 w-full h-1 bg-danger" id="border-salinitas"></div>
+            <div class="w-full flex justify-between items-start mb-2">
+                <span class="text-slate-400 font-medium">Salinitas (TDS)</span>
+                <i class="fa-solid fa-water text-slate-500 group-hover:text-danger transition-colors text-xl"></i>
+            </div>
+            <div class="my-4 text-center">
+                <span id="val-salinitas" class="text-5xl font-bold text-white value-transition">--</span>
+                <span class="text-2xl text-slate-400 ml-1">ppt</span>
+            </div>
+            <div id="status-salinitas" class="mt-auto px-4 py-1 rounded-full bg-slate-700 text-slate-300 text-sm font-semibold border border-slate-600">Menunggu Data</div>
+        </div>
+
+        <!-- DO -->
+        <div class="glass-panel rounded-2xl p-6 flex flex-col items-center relative overflow-hidden group">
+            <div class="absolute top-0 left-0 w-full h-1 bg-safe" id="border-do"></div>
+            <div class="w-full flex justify-between items-start mb-2">
+                <span class="text-slate-400 font-medium">Dissolved Oxygen</span>
+                <i class="fa-solid fa-wind text-slate-500 group-hover:text-safe transition-colors text-xl"></i>
+            </div>
+            <div class="my-4 text-center">
+                <span id="val-do" class="text-5xl font-bold text-white value-transition">--</span>
+                <span class="text-2xl text-slate-400 ml-1">mg/L</span>
+            </div>
+            <div id="status-do" class="mt-auto px-4 py-1 rounded-full bg-slate-700 text-slate-300 text-sm font-semibold border border-slate-600">Menunggu Data</div>
+        </div>
+    </div>
+
+    <div class="mb-4">
+        <h2 class="text-xl font-semibold text-slate-300 mb-4"><i class="fa-solid fa-scale-balanced text-accent mr-2"></i>Data Timbangan & Machine Learning</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <!-- LC1 -->
+        <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-slate-500 hover:border-t-accent transition-colors flex flex-col items-center">
+            <div class="text-center mb-6 w-full pb-4 border-b border-slate-700/50">
+                <h3 class="text-xl font-bold text-white">Timbangan 1</h3>
+                <p id="hari-1" class="text-slate-400 text-sm mt-1">Hari ke - --</p>
+            </div>
+            <div class="space-y-5 w-full text-center">
+                <div>
+                    <div class="text-slate-400 mb-1">Berat Rata-Rata</div>
+                    <div>
+                        <span id="berat-1" class="text-3xl font-bold text-white value-transition">--</span>
+                        <span class="text-xl font-bold text-slate-300 ml-1">G</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-slate-400 mb-1">Average Daily Gain</div>
+                    <div>
+                        <span id="adg-1" class="text-xl font-bold text-accent">--</span>
+                        <span class="text-lg font-bold text-accent ml-1">G</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LC2 -->
+        <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-slate-500 hover:border-t-accent transition-colors flex flex-col items-center">
+            <div class="text-center mb-6 w-full pb-4 border-b border-slate-700/50">
+                <h3 class="text-xl font-bold text-white">Timbangan 2</h3>
+                <p id="hari-2" class="text-slate-400 text-sm mt-1">Hari ke - --</p>
+            </div>
+            <div class="space-y-5 w-full text-center">
+                <div>
+                    <div class="text-slate-400 mb-1">Berat Rata-Rata</div>
+                    <div>
+                        <span id="berat-2" class="text-3xl font-bold text-white value-transition">--</span>
+                        <span class="text-xl font-bold text-slate-300 ml-1">G</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-slate-400 mb-1">Average Daily Gain</div>
+                    <div>
+                        <span id="adg-2" class="text-xl font-bold text-accent">--</span>
+                        <span class="text-lg font-bold text-accent ml-1">G</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LC3 -->
+        <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-slate-500 hover:border-t-accent transition-colors flex flex-col items-center">
+            <div class="text-center mb-6 w-full pb-4 border-b border-slate-700/50">
+                <h3 class="text-xl font-bold text-white">Timbangan 3</h3>
+                <p id="hari-3" class="text-slate-400 text-sm mt-1">Hari ke - --</p>
+            </div>
+            <div class="space-y-5 w-full text-center">
+                <div>
+                    <div class="text-slate-400 mb-1">Berat Rata-Rata</div>
+                    <div>
+                        <span id="berat-3" class="text-3xl font-bold text-white value-transition">--</span>
+                        <span class="text-xl font-bold text-slate-300 ml-1">G</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-slate-400 mb-1">Average Daily Gain</div>
+                    <div>
+                        <span id="adg-3" class="text-xl font-bold text-accent">--</span>
+                        <span class="text-lg font-bold text-accent ml-1">G</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDQCnN1Q0CDMN3ef-e-nKGEV-Boh6JsEQ0",
+            authDomain: "crabs-wp.firebaseapp.com",
+            databaseURL: "https://crabs-wp-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "crabs-wp",
+            storageBucket: "crabs-wp.firebasestorage.app",
+            messagingSenderId: "207016258888",
+            appId: "1:207016258888:web:7831a964768ba52253d77d",
+            measurementId: "G-05NYPTBENS"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getDatabase(app);
+
+        // KONFIGURASI DIREKTORI UTAMA (Sama seperti halaman lain)
+        // Biarkan kosong '' jika data ada di luar (root), atau ketik 'd' jika data masuk ke direktori /d
+        const BASE_NODE = '';
+        
+        // Fungsi pembantu untuk merangkai path Firebase secara otomatis
+        const getPath = (path) => BASE_NODE !== '' ? `${BASE_NODE}/${path}` : path;
+
+        const formatDec = (num) => Number(num).toFixed(1);
+        const formatInt = (num) => Math.round(Number(num));
+
+        function updateStatusUI(id, isSafe) {
+            const statusEl = document.getElementById(`status-${id}`);
+            const borderEl = document.getElementById(`border-${id}`);
+            const cardEl = document.getElementById(`card-${id}`);
+
+            if (isSafe) {
+                statusEl.textContent = "Status : Aman";
+                statusEl.className = "mt-auto px-4 py-1 rounded-full bg-safe/20 text-safe text-sm font-semibold border border-safe/30";
+                borderEl.className = "absolute top-0 left-0 w-full h-1 bg-safe";
+                if(cardEl) cardEl.classList.remove('pulse-danger');
+            } else {
+                statusEl.textContent = "Status : Berbahaya";
+                statusEl.className = "mt-auto px-4 py-1 rounded-full bg-danger/20 text-danger text-sm font-semibold border border-danger/30";
+                borderEl.className = "absolute top-0 left-0 w-full h-1 bg-danger";
+                if(cardEl) cardEl.classList.add('pulse-danger');
+            }
+        }
+
+        function flashEffect(elementId) {
+            const el = document.getElementById(elementId);
+            if(el) {
+                el.style.color = '#38bdf8';
+                setTimeout(() => { el.style.color = 'white'; }, 300);
+            }
+        }
+
+        signInWithEmailAndPassword(auth, "crabs.wp@email.com", "crabs.wp")
+            .then((userCredential) => {
+                const dot = document.getElementById('connection-dot');
+                const text = document.getElementById('connection-text');
+                const statusBox = document.getElementById('connection-status');
+                
+                if(dot) dot.className = "w-3 h-3 rounded-full bg-safe mr-3 animate-ping";
+                if(text) {
+                    text.textContent = "Terhubung ke Firebase";
+                    text.classList.replace('text-slate-300', 'text-safe');
+                }
+                if(statusBox) statusBox.classList.replace('border-slate-600', 'border-safe/50');
+
+                // Listener 1: Real-time Kualitas Air (TETAP DI ROOT)
+                // Kualitas air tidak menggunakan getPath() agar tidak terpengaruh jika ML dipindah ke /d
+                const realtimeRef = ref(db, 'realtime-db');
+                onValue(realtimeRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        const suhu = data.Temperature || 0;
+                        const ph = data.pH || 0;
+                        const salinitas = data.TDS || 0;
+                        const doValue = data.DO || 0;
+
+                        document.getElementById('val-suhu').textContent = formatDec(suhu);
+                        updateStatusUI('suhu', suhu >= 25 && suhu <= 32);
+
+                        document.getElementById('val-ph').textContent = formatDec(ph);
+                        updateStatusUI('ph', ph >= 6.5 && ph <= 8.5);
+
+                        document.getElementById('val-salinitas').textContent = formatInt(salinitas);
+                        updateStatusUI('salinitas', salinitas <= 30);
+
+                        document.getElementById('val-do').textContent = formatDec(doValue);
+                        updateStatusUI('do', doValue >= 4.0);
+
+                        flashEffect('val-suhu'); flashEffect('val-ph'); 
+                        flashEffect('val-salinitas'); flashEffect('val-do'); 
+                    }
+                });
+
+                // Listener 2: Hasil Machine Learning (FLEKSIBEL MENGGUNAKAN getPath)
+                const mlRef = ref(db, getPath('ml-predictions/Data_Prediksi'));
+                onValue(mlRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        if (data.LC1) {
+                            document.getElementById('hari-1').textContent = `Hari ke - ${data.LC1.Hari_Aktual_Terakhir || '--'}`;
+                            document.getElementById('berat-1').textContent = formatDec(data.LC1.Berat_Rata_Rata_Per_Ekor_Aktual_G || 0);
+                            document.getElementById('adg-1').textContent = formatDec(data.LC1.ADG_Laju_Pertumbuhan_Harian_G || 0);
+                        }
+                        if (data.LC2) {
+                            document.getElementById('hari-2').textContent = `Hari ke - ${data.LC2.Hari_Aktual_Terakhir || '--'}`;
+                            document.getElementById('berat-2').textContent = formatDec(data.LC2.Berat_Rata_Rata_Per_Ekor_Aktual_G || 0);
+                            document.getElementById('adg-2').textContent = formatDec(data.LC2.ADG_Laju_Pertumbuhan_Harian_G || 0);
+                        }
+                        if (data.LC3) {
+                            document.getElementById('hari-3').textContent = `Hari ke - ${data.LC3.Hari_Aktual_Terakhir || '--'}`;
+                            document.getElementById('berat-3').textContent = formatDec(data.LC3.Berat_Rata_Rata_Per_Ekor_Aktual_G || 0);
+                            document.getElementById('adg-3').textContent = formatDec(data.LC3.ADG_Laju_Pertumbuhan_Harian_G || 0);
+                        }
+
+                        flashEffect('berat-1'); flashEffect('berat-2'); flashEffect('berat-3');
+                        flashEffect('adg-1'); flashEffect('adg-2'); flashEffect('adg-3');
+                    }
+                });
+
+            })
+            .catch((error) => {
+                console.error("Error Firebase Auth:", error);
+                const dot = document.getElementById('connection-dot');
+                const text = document.getElementById('connection-text');
+                const statusBox = document.getElementById('connection-status');
+                if(dot) dot.className = "w-3 h-3 rounded-full bg-danger mr-3";
+                if(text) { text.textContent = "Koneksi Database Gagal"; text.classList.replace('text-slate-300', 'text-danger'); }
+                if(statusBox) statusBox.classList.replace('border-slate-600', 'border-danger/50');
+            });
+    </script>
+</body>
+</html>
