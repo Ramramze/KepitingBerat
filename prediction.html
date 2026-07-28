@@ -59,7 +59,6 @@
         </div>
     </header>
 
-    <!-- Navigasi Link Antar Halaman -->
     <nav class="flex flex-wrap gap-2 md:gap-4 mb-8 border-b border-slate-700/50 pb-4">
         <a href="realtime.html" class="px-5 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-semibold hover:bg-slate-700 transition-all flex items-center">
             <i class="fa-solid fa-tower-broadcast mr-2"></i> Real-time Monitoring
@@ -73,15 +72,140 @@
         <a href="prediction.html" class="px-5 py-2.5 rounded-xl bg-accent text-dark font-bold shadow-lg shadow-accent/20 transition-all flex items-center">
             <i class="fa-solid fa-brain mr-2"></i> Prediksi ML
         </a>
+        <a href="settings.html" class="px-5 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-semibold hover:bg-slate-700 transition-all flex items-center">
+            <i class="fa-solid fa-gear mr-2"></i> Pengaturan
+        </a>
     </nav>
 
-    <!-- Ringkasan Akurasi Model -->
     <div class="mb-4 flex flex-col md:flex-row md:items-center justify-between">
-        <h2 class="text-xl font-semibold text-slate-300 mb-2 md:mb-0"><i class="fa-solid fa-bullseye text-accent mr-2"></i>Validasi Model Machine Learning (MAPE)</h2>
-        <span class="text-sm text-slate-400 bg-slate-800 px-3 py-1 rounded-full"><i class="fa-solid fa-calendar-check mr-1"></i> Siklus: 2026-07-09</span>
+        <h2 class="text-xl font-semibold text-slate-300 mb-2 md:mb-0"><i class="fa-solid fa-scale-balanced text-accent mr-2"></i>Status Timbangan & Estimasi Panen</h2>
+        <span class="text-sm text-slate-400 bg-slate-800 px-3 py-1 rounded-full"><i class="fa-solid fa-bolt text-warning mr-1"></i> Data Real-time ML</span>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <!-- LC1 -->
+        <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-slate-500 hover:border-t-accent transition-colors flex flex-col items-center">
+            <div class="text-center mb-6 w-full pb-4 border-b border-slate-700/50">
+                <h3 class="text-xl font-bold text-white">Timbangan 1</h3>
+                <p id="hari-1" class="text-slate-400 text-sm mt-1">Hari ke - --</p>
+            </div>
+            <div class="space-y-6 w-full text-center">
+                <div>
+                    <div class="text-slate-400 mb-1 text-sm">Berat Rata-Rata</div>
+                    <div>
+                        <span id="berat-1" class="text-3xl font-bold text-white">0.00</span>
+                        <span class="text-xl font-bold text-slate-300 ml-1">G</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-slate-400 mb-1 text-sm">Average Daily Gain</div>
+                    <div>
+                        <span id="adg-1" class="text-xl font-bold text-accent">0.00</span>
+                        <span id="adg-unit-1" class="text-lg font-bold text-accent ml-1">G</span>
+                    </div>
+                </div>
+                <!-- Estimasi Mingguan LC1 -->
+                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700">
+                    <div id="estimasi-minggu-text-1" class="text-slate-300 mb-1 text-sm font-semibold">Estimasi Mgg ke---</div>
+                    <div>
+                        <span id="estimasi-minggu-val-1" class="text-2xl font-bold text-white">0.00</span>
+                        <span class="text-lg font-bold text-slate-400 ml-1">G</span>
+                    </div>
+                    <div id="estimasi-minggu-sub-1" class="text-xs text-slate-500 mt-1 italic">--</div>
+                </div>
+                <div>
+                    <div class="text-slate-400 mb-1 text-sm">Estimasi Panen</div>
+                    <div id="panen-1" class="text-lg font-bold text-slate-300">
+                        --
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LC2 -->
+        <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-slate-500 hover:border-t-accent transition-colors flex flex-col items-center">
+            <div class="text-center mb-6 w-full pb-4 border-b border-slate-700/50">
+                <h3 class="text-xl font-bold text-white">Timbangan 2</h3>
+                <p id="hari-2" class="text-slate-400 text-sm mt-1">Hari ke - --</p>
+            </div>
+            <div class="space-y-6 w-full text-center">
+                <div>
+                    <div class="text-slate-400 mb-1 text-sm">Berat Rata-Rata</div>
+                    <div>
+                        <span id="berat-2" class="text-3xl font-bold text-white">0.00</span>
+                        <span class="text-xl font-bold text-slate-300 ml-1">G</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-slate-400 mb-1 text-sm">Average Daily Gain</div>
+                    <div>
+                        <span id="adg-2" class="text-xl font-bold text-accent">0.00</span>
+                        <span id="adg-unit-2" class="text-lg font-bold text-accent ml-1">G</span>
+                    </div>
+                </div>
+                <!-- Estimasi Mingguan LC2 -->
+                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700">
+                    <div id="estimasi-minggu-text-2" class="text-slate-300 mb-1 text-sm font-semibold">Estimasi Mgg ke---</div>
+                    <div>
+                        <span id="estimasi-minggu-val-2" class="text-2xl font-bold text-white">0.00</span>
+                        <span class="text-lg font-bold text-slate-400 ml-1">G</span>
+                    </div>
+                    <div id="estimasi-minggu-sub-2" class="text-xs text-slate-500 mt-1 italic">--</div>
+                </div>
+                <div>
+                    <div class="text-slate-400 mb-1 text-sm">Estimasi Panen</div>
+                    <div id="panen-2" class="text-lg font-bold text-slate-300">
+                        --
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LC3 -->
+        <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-slate-500 hover:border-t-accent transition-colors flex flex-col items-center">
+            <div class="text-center mb-6 w-full pb-4 border-b border-slate-700/50">
+                <h3 class="text-xl font-bold text-white">Timbangan 3</h3>
+                <p id="hari-3" class="text-slate-400 text-sm mt-1">Hari ke - --</p>
+            </div>
+            <div class="space-y-6 w-full text-center">
+                <div>
+                    <div class="text-slate-400 mb-1 text-sm">Berat Rata-Rata</div>
+                    <div>
+                        <span id="berat-3" class="text-3xl font-bold text-white">0.00</span>
+                        <span class="text-xl font-bold text-slate-300 ml-1">G</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-slate-400 mb-1 text-sm">Average Daily Gain</div>
+                    <div>
+                        <span id="adg-3" class="text-xl font-bold text-accent">0.00</span>
+                        <span id="adg-unit-3" class="text-lg font-bold text-accent ml-1">G</span>
+                    </div>
+                </div>
+                <!-- Estimasi Mingguan LC3 -->
+                <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700">
+                    <div id="estimasi-minggu-text-3" class="text-slate-300 mb-1 text-sm font-semibold">Estimasi Mgg ke---</div>
+                    <div>
+                        <span id="estimasi-minggu-val-3" class="text-2xl font-bold text-white">0.00</span>
+                        <span class="text-lg font-bold text-slate-400 ml-1">G</span>
+                    </div>
+                    <div id="estimasi-minggu-sub-3" class="text-xs text-slate-500 mt-1 italic">--</div>
+                </div>
+                <div>
+                    <div class="text-slate-400 mb-1 text-sm">Estimasi Panen</div>
+                    <div id="panen-3" class="text-lg font-bold text-slate-300">
+                        --
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-4 flex flex-col md:flex-row md:items-center justify-between mt-12">
+        <h2 class="text-xl font-semibold text-slate-300 mb-2 md:mb-0"><i class="fa-solid fa-bullseye text-accent mr-2"></i>Validasi Model Keseluruhan (Harian)</h2>
+        <span class="text-sm text-slate-400 bg-slate-800 px-3 py-1 rounded-full"><i class="fa-solid fa-calculator mr-1"></i> Rata-rata MAPE</span>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <!-- Akurasi LC1 -->
         <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-slate-500 hover:border-t-accent transition-colors flex flex-col items-center relative">
             <div class="text-center w-full pb-3 border-b border-slate-700/50 mb-4">
                 <h3 class="text-lg font-bold text-white">Akurasi Timbangan 1</h3>
@@ -90,7 +214,6 @@
                 <p class="text-slate-400 italic">Memuat evaluasi...</p>
             </div>
         </div>
-        <!-- Akurasi LC2 -->
         <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-slate-500 hover:border-t-accent transition-colors flex flex-col items-center relative">
             <div class="text-center w-full pb-3 border-b border-slate-700/50 mb-4">
                 <h3 class="text-lg font-bold text-white">Akurasi Timbangan 2</h3>
@@ -99,7 +222,6 @@
                 <p class="text-slate-400 italic">Memuat evaluasi...</p>
             </div>
         </div>
-        <!-- Akurasi LC3 -->
         <div class="glass-panel rounded-2xl p-6 border-t-4 border-t-slate-500 hover:border-t-accent transition-colors flex flex-col items-center relative">
             <div class="text-center w-full pb-3 border-b border-slate-700/50 mb-4">
                 <h3 class="text-lg font-bold text-white">Akurasi Timbangan 3</h3>
@@ -110,8 +232,7 @@
         </div>
     </div>
 
-    <!-- Pilihan Tab Timbangan Global (Untuk Grafik & Tabel) -->
-    <div class="mb-6 flex justify-end">
+    <div class="mb-6 flex justify-end mt-12">
         <div class="flex bg-slate-800 rounded-lg p-1 space-x-1 shadow-lg border border-slate-700">
             <button onclick="changeTab('LC1')" id="tab-LC1" class="tab-btn tab-active px-8 py-2.5 rounded-md text-sm md:text-base font-bold">LC1</button>
             <button onclick="changeTab('LC2')" id="tab-LC2" class="tab-btn tab-inactive px-8 py-2.5 rounded-md text-sm md:text-base font-bold">LC2</button>
@@ -119,7 +240,6 @@
         </div>
     </div>
 
-    <!-- Grafik Prediksi ML -->
     <div class="mb-4">
         <h2 class="text-xl font-semibold text-slate-300 mb-4"><i class="fa-solid fa-chart-line text-accent mr-2"></i>Grafik Perbandingan: Aktual vs Prediksi Berat</h2>
     </div>
@@ -128,10 +248,35 @@
             <canvas id="predictionChart"></canvas>
         </div>
     </div>
+    
+    <div class="mb-4 mt-12">
+        <h2 class="text-xl font-semibold text-slate-300 mb-4 md:mb-0"><i class="fa-solid fa-calendar-week text-accent mr-2"></i>Data Validasi Mingguan</h2>
+        <p class="text-sm text-slate-400 mt-1">Mengevaluasi seberapa akurat prediksi yang dibuat pada minggu sebelumnya dibandingkan dengan berat aslinya hari ini.</p>
+    </div>
+    
+    <div class="glass-panel rounded-2xl p-0 overflow-hidden mb-10 border border-slate-700/50">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm md:text-base text-slate-300 whitespace-nowrap">
+                <thead class="bg-slate-800/80 border-b border-slate-700">
+                    <tr>
+                        <th class="p-4 font-semibold text-slate-200">Siklus Ke</th>
+                        <th class="p-4 font-semibold text-slate-200">Hari Aktual</th>
+                        <th class="p-4 font-semibold text-slate-200">Berat Asli (g)</th>
+                        <th class="p-4 font-semibold text-accent">Prediksi dari Minggu Lalu (g)</th>
+                        <th class="p-4 font-semibold text-blue-300">Hasil Validasi (MAPE)</th>
+                    </tr>
+                </thead>
+                <tbody id="weekly-validation-table-body" class="divide-y divide-slate-700/50">
+                    <tr>
+                        <td colspan="5" class="p-8 text-center text-slate-500">Memuat data evaluasi mingguan...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    <!-- Tabel Log Prediksi Harian -->
-    <div class="mb-4 flex flex-col md:flex-row md:items-center justify-between">
-        <h2 class="text-xl font-semibold text-slate-300 mb-4 md:mb-0"><i class="fa-solid fa-list-ol text-accent mr-2"></i>Log Prediksi Harian (Regresi Linier)</h2>
+    <div class="mb-4 flex flex-col md:flex-row md:items-center justify-between mt-12">
+        <h2 class="text-xl font-semibold text-slate-300 mb-4 md:mb-0"><i class="fa-solid fa-list-ol text-accent mr-2"></i>Log Prediksi Harian Terperinci</h2>
     </div>
     
     <div class="glass-panel rounded-2xl p-0 overflow-hidden mb-10">
@@ -143,13 +288,12 @@
                         <th class="p-4 font-semibold text-slate-200">Berat Aktual (g)</th>
                         <th class="p-4 font-semibold text-accent">ADG (g/hari)</th>
                         <th class="p-4 font-semibold text-safe">Prediksi Besok (g)</th>
-                        <th class="p-4 font-semibold text-warning">Target Mingguan (g)</th>
-                        <th class="p-4 font-semibold text-blue-300">Validasi Model (MAPE)</th>
+                        <th class="p-4 font-semibold text-warning">Validasi Model (MAPE)</th>
                     </tr>
                 </thead>
                 <tbody id="prediction-table-body" class="divide-y divide-slate-700/50">
                     <tr>
-                        <td colspan="6" class="p-8 text-center text-slate-500">Memuat log prediksi...</td>
+                        <td colspan="5" class="p-8 text-center text-slate-500">Memuat log prediksi...</td>
                     </tr>
                 </tbody>
             </table>
@@ -176,22 +320,16 @@
         const auth = getAuth(app);
         const db = getDatabase(app);
 
-        // KONFIGURASI DIREKTORI UTAMA (Sama seperti di skrip Flask Python)
-        // Biarkan kosong '' jika data ada di luar (root), atau ketik 'd' jika data masuk ke direktori /d
         const BASE_NODE = '';
-        
-        // Fungsi pembantu untuk merangkai path Firebase secara otomatis
         const getPath = (path) => BASE_NODE !== '' ? `${BASE_NODE}/${path}` : path;
 
         let mlData = {};
         let validationData = {};
         let currentActiveTab = 'LC1';
-        let predictionChartInstance = null; // Variabel penampung grafik
+        let predictionChartInstance = null; 
 
-        // Helper Format Number
         const formatDec = (num) => Number(num).toFixed(2);
         
-        // Fungsi warna teks berdasarkan kriteria
         function getColorClass(kriteria) {
             if (!kriteria) return 'text-slate-400';
             const k = kriteria.toLowerCase();
@@ -199,6 +337,85 @@
             if (k.includes('baik')) return 'text-blue-400';
             if (k.includes('cukup')) return 'text-warning';
             return 'text-danger';
+        }
+
+        // Render Kartu Status Terkini (Berat, ADG, Estimasi Panen)
+        function renderCurrentStatusCards() {
+            ['LC1', 'LC2', 'LC3'].forEach((lc, index) => {
+                const idNum = index + 1;
+                const logs = mlData[lc] || {};
+                const daysKeys = Object.keys(logs).filter(k => k.startsWith('Hari_'))
+                                    .sort((a, b) => parseInt(a.replace('Hari_', '')) - parseInt(b.replace('Hari_', '')));
+
+                const elHari = document.getElementById(`hari-${idNum}`);
+                const elBerat = document.getElementById(`berat-${idNum}`);
+                const elAdg = document.getElementById(`adg-${idNum}`);
+                const elAdgUnit = document.getElementById(`adg-unit-${idNum}`);
+                
+                // Elemen baru untuk Target Mingguan
+                const elEstMingguText = document.getElementById(`estimasi-minggu-text-${idNum}`);
+                const elEstMingguVal = document.getElementById(`estimasi-minggu-val-${idNum}`);
+                const elEstMingguSub = document.getElementById(`estimasi-minggu-sub-${idNum}`);
+                
+                const elPanen = document.getElementById(`panen-${idNum}`);
+
+                if (daysKeys.length > 0) {
+                    const lastDayKey = daysKeys[daysKeys.length - 1];
+                    const lastLog = logs[lastDayKey];
+
+                    elHari.textContent = `Hari ke - ${lastLog.Hari_Aktual_Terakhir}`;
+                    elBerat.textContent = formatDec(lastLog.Berat_Rata_Rata_Per_Ekor_Aktual_G);
+                    
+                    const adgVal = lastLog.ADG_Laju_Pertumbuhan_Harian_G;
+                    elAdg.textContent = (adgVal > 0 ? '+' : '') + formatDec(adgVal);
+                    
+                    // Warna ADG
+                    if (adgVal < 0) {
+                        elAdg.className = "text-xl font-bold text-danger";
+                        elAdgUnit.className = "text-lg font-bold text-danger ml-1";
+                    } else {
+                        elAdg.className = "text-xl font-bold text-accent";
+                        elAdgUnit.className = "text-lg font-bold text-accent ml-1";
+                    }
+
+                    // --- LOGIKA CERDAS: MENGAMBIL PREDIKSI DARI MINGGU LALU ---
+                    const currentDay = lastLog.Hari_Aktual_Terakhir;
+                    const currentWeek = lastLog.Minggu_Ke || Math.ceil(currentDay / 7);
+                    const endOfPrevWeek = (currentWeek - 1) * 7;
+                    
+                    elEstMingguText.textContent = `Estimasi Mgg ke-${currentWeek}`;
+                    
+                    // Jika data hari ke-7/14/21 (akhir minggu lalu) tersedia, tampilkan prediksi yang dibuat saat itu
+                    if (endOfPrevWeek > 0 && logs[`Hari_${endOfPrevWeek}`]) {
+                        const prevPred = logs[`Hari_${endOfPrevWeek}`].Prediksi_Berat_Mingguan_G;
+                        elEstMingguVal.textContent = formatDec(prevPred);
+                        elEstMingguSub.textContent = `Tebakan dari Hari ke-${endOfPrevWeek}`;
+                    } else {
+                        // Fallback: Jika di minggu 1 atau data bolong, gunakan prediksi berjalan hari ini
+                        elEstMingguVal.textContent = formatDec(lastLog.Prediksi_Berat_Mingguan_G);
+                        elEstMingguSub.textContent = `Prediksi berjalan hari ini`;
+                    }
+
+                    // Teks Estimasi Panen
+                    if (lastLog.Estimasi_Sisa_Hari_Panen === 0) {
+                        elPanen.innerHTML = `<span class="text-2xl font-bold text-safe animate-pulse">Siap Panen! 🎉</span><br><span class="text-xs text-slate-500 font-normal">Target: Hari ke-${lastLog.Estimasi_Hari_Panen_Absolut}</span>`;
+                    } else if (lastLog.Estimasi_Sisa_Hari_Panen === -1) {
+                        elPanen.innerHTML = `<span class="text-xl font-bold text-danger">Data Fluktuatif</span>`;
+                    } else if (lastLog.Estimasi_Sisa_Hari_Panen !== undefined) {
+                        elPanen.innerHTML = `<span class="text-3xl font-bold text-safe">${lastLog.Estimasi_Sisa_Hari_Panen} <span class="text-sm font-semibold ml-1 text-slate-400">Hari Lagi</span></span><br><span class="text-xs text-slate-500 font-normal">Target Absolut: Hari ke-${lastLog.Estimasi_Hari_Panen_Absolut}</span>`;
+                    }
+                } else {
+                    elHari.textContent = `Hari ke - --`;
+                    elBerat.textContent = `0.00`;
+                    elAdg.textContent = `0.00`;
+                    
+                    if(elEstMingguText) elEstMingguText.textContent = `Estimasi Mgg ke---`;
+                    if(elEstMingguVal) elEstMingguVal.textContent = `0.00`;
+                    if(elEstMingguSub) elEstMingguSub.textContent = `--`;
+                    
+                    elPanen.innerHTML = `<span class="text-slate-500 text-sm italic">Belum ada data...</span>`;
+                }
+            });
         }
 
         // Render Kartu Ringkasan (Validation Summary)
@@ -237,7 +454,6 @@
             const logs = mlData[currentActiveTab] || {};
             const vals = validationData[currentActiveTab] || {};
             
-            // Ambil semua kunci "Hari_X" dan urutkan bilangannya secara berurutan
             const daysKeys = Object.keys(logs).filter(k => k.startsWith('Hari_'))
                                 .sort((a, b) => parseInt(a.replace('Hari_', '')) - parseInt(b.replace('Hari_', '')));
 
@@ -252,23 +468,19 @@
                 labels.push(`Hari ${log.Hari_Aktual_Terakhir}`);
                 dataAktual.push(formatDec(log.Berat_Rata_Rata_Per_Ekor_Aktual_G));
 
-                // Untuk Hari 1, Prediksi = Aktual. Untuk hari lain, ambil dari hasil validasi model masa lalu
                 if (val && val.Y_Prediksi_G !== undefined) {
                     dataPrediksi.push(formatDec(val.Y_Prediksi_G));
                 } else {
-                    // Fallback jika belum ada validasi (Hari 1)
                     dataPrediksi.push(formatDec(log.Berat_Rata_Rata_Per_Ekor_Aktual_G));
                 }
             });
 
             if (predictionChartInstance) {
-                // Update grafik yang sudah ada
                 predictionChartInstance.data.labels = labels;
                 predictionChartInstance.data.datasets[0].data = dataAktual;
                 predictionChartInstance.data.datasets[1].data = dataPrediksi;
                 predictionChartInstance.update();
             } else {
-                // Buat grafik baru
                 predictionChartInstance = new Chart(ctx, {
                     type: 'line',
                     data: {
@@ -277,7 +489,7 @@
                             {
                                 label: 'Berat Aktual (g)',
                                 data: dataAktual,
-                                borderColor: '#10b981', // Hijau (Sesuai contoh)
+                                borderColor: '#10b981', 
                                 backgroundColor: '#10b981',
                                 tension: 0.1,
                                 fill: false,
@@ -288,14 +500,14 @@
                             {
                                 label: 'Berat Prediksi (g)',
                                 data: dataPrediksi,
-                                borderColor: '#f59e0b', // Oranye (Sesuai contoh)
+                                borderColor: '#f59e0b', 
                                 backgroundColor: '#f59e0b',
-                                borderDash: [6, 6], // Garis putus-putus
+                                borderDash: [6, 6], 
                                 tension: 0.1,
                                 fill: false,
                                 borderWidth: 3,
                                 pointRadius: 5,
-                                pointStyle: 'crossRot', // Icon X (Sesuai contoh)
+                                pointStyle: 'crossRot', 
                                 pointBorderWidth: 2
                             }
                         ]
@@ -305,12 +517,9 @@
                         maintainAspectRatio: false,
                         interaction: { mode: 'index', intersect: false },
                         plugins: {
-                            legend: { 
-                                labels: { color: '#f8fafc', font: { family: 'Inter', size: 14 } } 
-                            },
+                            legend: { labels: { color: '#f8fafc', font: { family: 'Inter', size: 14 } } },
                             tooltip: {
-                                padding: 12,
-                                bodyFont: { size: 14 },
+                                padding: 12, bodyFont: { size: 14 },
                                 callbacks: {
                                     label: function(context) {
                                         let label = context.dataset.label || '';
@@ -322,20 +531,54 @@
                             }
                         },
                         scales: {
-                            x: { 
-                                ticks: { color: '#94a3b8', font: { size: 13 } }, 
-                                grid: { color: 'rgba(255,255,255,0.05)' },
-                                title: { display: true, text: 'Waktu (Hari)', color: '#94a3b8', font: { size: 14 } }
-                            },
-                            y: {
-                                ticks: { color: '#94a3b8', font: { size: 13 } },
-                                grid: { color: 'rgba(255,255,255,0.05)' },
-                                title: { display: true, text: 'Berat (Gram)', color: '#94a3b8', font: { size: 14 } }
-                            }
+                            x: { ticks: { color: '#94a3b8', font: { size: 13 } }, grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, text: 'Waktu (Hari)', color: '#94a3b8', font: { size: 14 } } },
+                            y: { ticks: { color: '#94a3b8', font: { size: 13 } }, grid: { color: 'rgba(255,255,255,0.05)' }, title: { display: true, text: 'Berat (Gram)', color: '#94a3b8', font: { size: 14 } } }
                         }
                     }
                 });
             }
+        }
+        
+        // Render Tabel Validasi MINGGUAN
+        function renderWeeklyValidationTable() {
+            const tbody = document.getElementById('weekly-validation-table-body');
+            tbody.innerHTML = '';
+            
+            const vals = validationData[currentActiveTab]?.Data_Validasi_Mingguan || {};
+            const weeklyKeys = Object.keys(vals).sort((a,b) => parseInt(a.replace('Minggu_', '')) - parseInt(b.replace('Minggu_', '')));
+            
+            if (weeklyKeys.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500">Evaluasi mingguan akan muncul di akhir minggu (Hari 7, 14, dst).</td></tr>`;
+                return;
+            }
+            
+            weeklyKeys.forEach(key => {
+                const wData = vals[key];
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-800/30 transition-colors";
+                
+                const colorCls = getColorClass(wData.Interpretasi);
+                const valTeks = `
+                    <div class="flex flex-col">
+                        <span class="font-bold text-white">${formatDec(wData.Akurasi_Persen)}% <span class="text-xs ${colorCls} ml-1 uppercase">(${wData.Interpretasi})</span></span>
+                        <span class="text-xs text-slate-400 mt-1">Error: <span class="text-danger">${formatDec(wData.Error_MAPE_Persen)}%</span></span>
+                    </div>
+                `;
+                
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-white">Minggu ke-${wData.Minggu_Ke_Validasi}</td>
+                    <td class="p-4 font-medium text-slate-400">Hari ${wData.Hari_Ke_Aktual}</td>
+                    <td class="p-4 font-bold text-slate-200">${formatDec(wData.Y_Aktual_G)} g</td>
+                    <td class="p-4 font-bold text-accent">
+                        <div class="flex flex-col">
+                            <span>${formatDec(wData.Y_Prediksi_Lalu_G)} g</span>
+                            <span class="text-xs text-slate-500 mt-0.5">Ditebak dari Mgg ke-${wData.Prediksi_Dari_Minggu_Ke}</span>
+                        </div>
+                    </td>
+                    <td class="p-4">${valTeks}</td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
         // Render Tabel Harian (Sesuai Tab)
@@ -344,50 +587,48 @@
             tbody.innerHTML = '';
             
             const logs = mlData[currentActiveTab] || {};
-            const vals = validationData[currentActiveTab] || {};
+            const vals = validationData[currentActiveTab] || {}; // Mengambil data validasi harian
             
-            // Ambil semua kunci "Hari_X" dan urutkan bilangannya secara berurutan
             const daysKeys = Object.keys(logs).filter(k => k.startsWith('Hari_'))
                                 .sort((a, b) => parseInt(a.replace('Hari_', '')) - parseInt(b.replace('Hari_', '')));
 
             if (daysKeys.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-500">Belum ada data yang dikalkulasi.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-slate-500">Belum ada data yang dikalkulasi.</td></tr>`;
                 return;
             }
 
             daysKeys.forEach(dayKey => {
                 const log = logs[dayKey];
-                const val = vals[dayKey] || null; 
+                const val = vals[dayKey] || null; // Mencocokkan validasi harian
                 
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-800/30 transition-colors";
-                
-                // Menyusun Data Teks Validasi
+
+                // Menyusun Data Teks Validasi Harian
                 let valTeks = `<span class="text-slate-500 text-sm italic">Belum dapat divalidasi</span>`;
                 if (val && val.Akurasi_Persen !== undefined) {
                     const colorCls = getColorClass(val.Interpretasi);
                     valTeks = `
                         <div class="flex flex-col">
                             <span class="font-bold text-white">${formatDec(val.Akurasi_Persen)}% <span class="text-xs ${colorCls} ml-1 uppercase">(${val.Interpretasi})</span></span>
-                            <span class="text-xs text-slate-400 mt-1">Error: <span class="text-danger">${formatDec(val.Error_MAPE_Persen)}%</span> | Prediksi Lama: ${formatDec(val.Y_Prediksi_G)}g</span>
+                            <span class="text-xs text-slate-400 mt-1">Error: <span class="text-danger">${formatDec(val.Error_MAPE_Persen)}%</span> | Prediksi H-1: ${formatDec(val.Y_Prediksi_G)}g</span>
                         </div>
                     `;
                 }
 
                 tr.innerHTML = `
-                    <td class="p-4 font-bold text-white">Hari ${log.Hari_Aktual_Terakhir}</td>
+                    <td class="p-4 font-medium text-white">
+                        <div class="flex flex-col">
+                            <span>Hari ${log.Hari_Aktual_Terakhir}</span>
+                            <span class="text-xs text-slate-500 mt-0.5">Minggu ke-${log.Minggu_Ke}</span>
+                        </div>
+                    </td>
                     <td class="p-4 font-medium text-slate-300">${formatDec(log.Berat_Rata_Rata_Per_Ekor_Aktual_G)}</td>
-                    <td class="p-4 font-bold text-accent">+${formatDec(log.ADG_Laju_Pertumbuhan_Harian_G)}</td>
+                    <td class="p-4 font-bold text-accent">${(log.ADG_Laju_Pertumbuhan_Harian_G > 0 ? '+' : '')}${formatDec(log.ADG_Laju_Pertumbuhan_Harian_G)}</td>
                     <td class="p-4 font-medium text-safe">
                         <div class="flex flex-col">
                             <span>${formatDec(log.Prediksi_Berat_Besok_G)}</span>
                             <span class="text-xs text-slate-500 mt-0.5">Utk. Hari ${log.Target_Hari_Besok}</span>
-                        </div>
-                    </td>
-                    <td class="p-4 font-medium text-warning">
-                        <div class="flex flex-col">
-                            <span>${formatDec(log.Prediksi_Berat_Mingguan_G)}</span>
-                            <span class="text-xs text-slate-500 mt-0.5">Utk. Hari ${log.Target_Hari_Mingguan}</span>
                         </div>
                     </td>
                     <td class="p-4">${valTeks}</td>
@@ -399,19 +640,15 @@
         // Fungsi Ganti Tab Data LC
         window.changeTab = function(tabName) {
             currentActiveTab = tabName;
-            
-            // Perbarui class tombol
             ['LC1', 'LC2', 'LC3'].forEach(lc => {
                 const btn = document.getElementById(`tab-${lc}`);
-                if (lc === tabName) {
-                    btn.className = "tab-btn tab-active px-8 py-2.5 rounded-md text-sm md:text-base font-bold";
-                } else {
-                    btn.className = "tab-btn tab-inactive px-8 py-2.5 rounded-md text-sm md:text-base font-bold";
-                }
+                if (lc === tabName) { btn.className = "tab-btn tab-active px-8 py-2.5 rounded-md text-sm md:text-base font-bold"; } 
+                else { btn.className = "tab-btn tab-inactive px-8 py-2.5 rounded-md text-sm md:text-base font-bold"; }
             });
             
             renderTable();
-            renderChart(); // Render ulang grafik saat tab berganti
+            renderWeeklyValidationTable();
+            renderChart(); 
         };
 
         // Autentikasi & Ambil Data
@@ -425,20 +662,21 @@
                 if(text) { text.textContent = "Terhubung ke Firebase"; text.classList.replace('text-slate-300', 'text-safe'); }
                 if(statusBox) statusBox.classList.replace('border-slate-600', 'border-safe/50');
 
-                // 1. Tarik Log Harian (Menggunakan getPath agar dinamis)
                 const logHarianRef = ref(db, getPath('log-ml-predictions/Log_Prediksi_Harian'));
                 onValue(logHarianRef, (snapshot) => {
                     mlData = snapshot.val() || {};
+                    renderCurrentStatusCards();
                     renderTable();
+                    renderWeeklyValidationTable();
                     renderChart();
                 });
 
-                // 2. Tarik Data Validasi MAPE (Menggunakan getPath agar dinamis)
                 const validasiRef = ref(db, getPath('log-ml-predictions-validation/Data_Validasi_MAPE'));
                 onValue(validasiRef, (snapshot) => {
                     validationData = snapshot.val() || {};
                     renderSummaryCards();
                     renderTable(); 
+                    renderWeeklyValidationTable();
                     renderChart(); 
                 });
             })

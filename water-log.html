@@ -42,7 +42,7 @@
     <header class="flex flex-col md:flex-row justify-between items-center mb-8 pb-6 border-b border-slate-700">
         <div>
             <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white mb-2">
-                <i class="fa-solid fa-crab text-accent mr-3"></i>SMART CRAB HOUSE
+                <i class="fa-solid fa-crab text-accent mr-3"></i>SMART CRAB HOUSE DASHBOARD
             </h1>
             <p class="text-slate-400 text-lg">Real-time Monitoring & Biomass Estimation</p>
         </div>
@@ -54,7 +54,6 @@
         </div>
     </header>
 
-    <!-- Navigasi Link Antar Halaman -->
     <nav class="flex flex-wrap gap-2 md:gap-4 mb-8 border-b border-slate-700/50 pb-4">
         <a href="realtime.html" class="px-5 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-semibold hover:bg-slate-700 transition-all flex items-center">
             <i class="fa-solid fa-tower-broadcast mr-2"></i> Real-time Monitoring
@@ -68,9 +67,11 @@
         <a href="prediction.html" class="px-5 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-semibold hover:bg-slate-700 transition-all flex items-center">
             <i class="fa-solid fa-brain mr-2"></i> Prediksi ML
         </a>
+        <a href="settings.html" class="px-5 py-2.5 rounded-xl bg-slate-800 text-slate-300 font-semibold hover:bg-slate-700 transition-all flex items-center">
+            <i class="fa-solid fa-gear mr-2"></i> Pengaturan
+        </a>
     </nav>
 
-    <!-- Tabel Log Data -->
     <div class="mb-4 flex flex-col md:flex-row md:items-center justify-between">
         <h2 class="text-xl font-semibold text-slate-300 mb-2 md:mb-0"><i class="fa-solid fa-table-list text-accent mr-2"></i>Log Historis Kualitas Air</h2>
         <span class="text-sm text-slate-400 bg-slate-800 px-3 py-1 rounded-full"><i class="fa-regular fa-clock mr-1"></i> Difilter per interval 15 menit</span>
@@ -133,21 +134,18 @@
         const formatDec = (num) => Number(num).toFixed(1);
         const formatInt = (num) => Math.round(Number(num));
 
-        // Fungsi Filter untuk membuat key interval 15 menitan (xx:00, xx:15, xx:30, xx:45)
         function get15MinIntervalKey(dateObj) {
             const y = dateObj.getFullYear();
             const m = String(dateObj.getMonth() + 1).padStart(2, '0');
             const d = String(dateObj.getDate()).padStart(2, '0');
             const h = String(dateObj.getHours()).padStart(2, '0');
             
-            // Bulatkan menit ke kelipatan 15 terdekat di bawahnya
             const min = Math.floor(dateObj.getMinutes() / 15) * 15;
             const minStr = String(min).padStart(2, '0');
             
             return `${y}-${m}-${d} ${h}:${minStr}`;
         }
 
-        // Proses Data Mentah
         function processFirebaseData(data) {
             const entries = Object.values(data);
             const groupedData = {};
@@ -166,14 +164,12 @@
 
                 if (isNaN(dateObj.getTime())) return;
 
-                // Masukkan ke dalam grup interval 15 menit
                 const groupKey = get15MinIntervalKey(dateObj);
                 
-                // Jika interval ini belum terisi data, isi dengan data pertama yang masuk
                 if (!groupedData[groupKey]) {
                     groupedData[groupKey] = {
-                        TimestampRaw: dateObj.getTime(), // Dipakai khusus untuk keperluan sortir matematika
-                        TimestampString: dateObj.toLocaleString('id-ID'), // Teks yang ditampilkan
+                        TimestampRaw: dateObj.getTime(), 
+                        TimestampString: dateObj.toLocaleString('id-ID'), 
                         Temperature: Number(row.Temperature || 0),
                         pH: Number(row.pH || 0),
                         TDS: Number(row.TDS || 0),
@@ -182,12 +178,10 @@
                 }
             });
 
-            // Jadikan format array agar mudah disortir
             waterDataArr = Object.values(groupedData);
             executeSort();
         }
 
-        // Jalankan pengurutan (Sort)
         function executeSort() {
             waterDataArr.sort((a, b) => {
                 let valA = a[currentSort.key];
@@ -201,20 +195,16 @@
             updateSortIcons();
         }
 
-        // Fungsi saat pengguna mengklik Header Tabel
         window.handleSort = function(key) {
             if (currentSort.key === key) {
-                // Balik arah (Toggle) jika kolom yang sama diklik lagi
                 currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
             } else {
-                // Kolom baru dipilih, set default ke descending (tertinggi ke terendah)
                 currentSort.key = key;
                 currentSort.direction = 'desc';
             }
             executeSort();
         };
 
-        // Memperbarui UI Ikon panah pada header tabel
         function updateSortIcons() {
             const keys = ['TimestampRaw', 'Temperature', 'pH', 'TDS', 'DO'];
             keys.forEach(k => {
@@ -229,7 +219,6 @@
             });
         }
 
-        // Tampilkan ke layar
         function renderTable() {
             const tbody = document.getElementById('water-table-body');
             if(!tbody) return;
@@ -254,7 +243,6 @@
             });
         }
 
-        // Autentikasi dan Mengambil Data
         signInWithEmailAndPassword(auth, "crabs.wp@email.com", "crabs.wp")
             .then((userCredential) => {
                 const dot = document.getElementById('connection-dot');
@@ -265,7 +253,6 @@
                 if(text) { text.textContent = "Terhubung ke Firebase"; text.classList.replace('text-slate-300', 'text-safe'); }
                 if(statusBox) statusBox.classList.replace('border-slate-600', 'border-safe/50');
 
-                // Ditingkatkan secara signifikan ke 10.000 agar data setelah difilter per 15 menit tetap banyak
                 const waterRef = query(ref(db, 'log-water-db'), limitToLast(10000));
                 
                 onValue(waterRef, (snapshot) => {
